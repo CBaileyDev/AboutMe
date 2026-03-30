@@ -1,4 +1,25 @@
 // ===========================
+// CUSTOM CURSOR
+// ===========================
+const cursorDot = document.querySelector('.cursor-dot');
+
+document.addEventListener('mousemove', (e) => {
+  cursorDot.style.top  = `${e.clientY}px`;
+  cursorDot.style.left = `${e.clientX}px`;
+});
+
+document.querySelectorAll('a, button, .btn-primary').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursorDot.style.transform = 'translate(-50%, -50%) scale(2)';
+    cursorDot.style.boxShadow = '0 0 28px rgba(22,163,74,1), 0 0 55px rgba(22,163,74,0.5)';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursorDot.style.transform = 'translate(-50%, -50%) scale(1)';
+    cursorDot.style.boxShadow = '0 0 18px rgba(22,163,74,0.9), 0 0 35px rgba(22,163,74,0.4)';
+  });
+});
+
+// ===========================
 // NAVBAR — shrink on scroll
 // ===========================
 const navbar = document.getElementById('navbar');
@@ -13,8 +34,20 @@ window.addEventListener('scroll', () => {
 });
 
 // ===========================
-// INTERSECTION OBSERVER — fade-in on scroll
-// (Ready to hook up CSS animations later)
+// MULTI-LAYER PARALLAX
+// ===========================
+const layers = document.querySelectorAll('.hero-layer');
+
+window.addEventListener('scroll', () => {
+  const offset = window.scrollY;
+  layers.forEach((layer, index) => {
+    const speed = (index + 1) * 0.05;
+    layer.style.transform = `translateY(${offset * speed}px)`;
+  });
+});
+
+// ===========================
+// FADE-IN ON SCROLL
 // ===========================
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
@@ -22,15 +55,15 @@ const observer = new IntersectionObserver((entries) => {
       entry.target.classList.add('visible');
     }
   });
-}, { threshold: 0.15 });
+}, { threshold: 0.12 });
 
-document.querySelectorAll('.card, .about-text, .about-tags, .contact-item').forEach(el => {
+document.querySelectorAll('.card, .about-text, .about-tags, .contact-item, .section-title').forEach(el => {
   el.classList.add('fade-in');
   observer.observe(el);
 });
 
 // ===========================
-// SMOOTH ACTIVE NAV HIGHLIGHT
+// ACTIVE NAV HIGHLIGHT
 // ===========================
 const sections = document.querySelectorAll('section[id]');
 const navLinks = document.querySelectorAll('.nav-links a');

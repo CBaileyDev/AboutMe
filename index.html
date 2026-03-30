@@ -3,12 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Carter Barker</title>
+  <title>Carter Bailey</title>
   <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body>
+
+  <!-- FIREFLIES -->
+  <div class="fireflies">
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+
+  <!-- CUSTOM CURSOR -->
+  <div class="cursor-dot"></div>
 
   <!-- NAV -->
   <nav class="navbar" id="navbar">
@@ -16,16 +26,22 @@
     <ul class="nav-links">
       <li><a href="#about">About</a></li>
       <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
   </nav>
 
   <!-- HERO -->
   <section class="hero" id="hero">
+    <div class="hero-layers">
+      <div class="hero-layer layer-back"></div>
+      <div class="hero-layer layer-mid"></div>
+      <div class="hero-layer layer-front"></div>
+    </div>
     <div class="hero-content">
       <p class="hero-sub">Hey, I'm</p>
-      <h1 class="hero-title">Carter <span class="accent">Barker</span></h1>
-      <p class="hero-desc">Builder of powerful tools, GUIs, and AI-driven experiences.<br>Michigan-based. Always pushing limits.</p>
+      <h1 class="hero-title">Carter <span class="accent">Bailey</span></h1>
+      <p class="hero-desc">I build aggressive, high-performance tools, GUIs, and AI-powered systems.<br>Michigan-based. Obsessed with speed, control, and pushing limits.</p>
       <a href="#contact" class="btn-primary">Get In Touch</a>
     </div>
     <div class="hero-glow"></div>
@@ -42,7 +58,7 @@
           <p>Currently deep in AI/ML, automation, and making software that punches above its weight.</p>
         </div>
         <div class="about-tags">
-          <span class="tag">AI & LLMs</span>
+          <span class="tag">AI &amp; LLMs</span>
           <span class="tag">GUI Development</span>
           <span class="tag">Game Tools</span>
           <span class="tag">Automation</span>
@@ -60,7 +76,7 @@
       <div class="cards">
         <div class="card">
           <i class="fa-solid fa-brain card-icon"></i>
-          <h3>AI & Automation</h3>
+          <h3>AI &amp; Automation</h3>
           <p>Leveraging cutting-edge LLMs and AI models to build tools that think fast and work harder than traditional software.</p>
         </div>
         <div class="card">
@@ -71,7 +87,7 @@
         <div class="card">
           <i class="fa-solid fa-gamepad card-icon"></i>
           <h3>Game Tooling</h3>
-          <p>Building game tools and cheats that operate at the edge of what's technically possible — precision, speed, reliability.</p>
+          <p>Building game tools that operate at the edge of what's technically possible — precision, speed, reliability.</p>
         </div>
         <div class="card">
           <i class="fa-solid fa-bolt card-icon"></i>
@@ -82,8 +98,24 @@
     </div>
   </section>
 
+  <!-- PROJECTS -->
+  <section class="section" id="projects">
+    <div class="container">
+      <h2 class="section-title">Featured <span class="accent">Project</span></h2>
+      <div class="cards">
+        <div class="card project-card">
+          <i class="fa-brands fa-discord card-icon"></i>
+          <h3>ABUSER — Discord Selfbot Framework</h3>
+          <p>A Discord selfbot framework with a PyQt6 desktop GUI built for automation, moderation, and high-control server management. 12 theme presets, token bucket rate limiting, async stack — built to push what's possible with Discord tooling.</p>
+          <p class="card-meta">Python 3.8+ &nbsp;·&nbsp; discord.py-self &nbsp;·&nbsp; PyQt6 &nbsp;·&nbsp; aiohttp &nbsp;·&nbsp; MIT License</p>
+          <a href="https://github.com/CBaileyDev/ABUSER" target="_blank" class="btn-primary" style="display:inline-block;margin-top:1.2rem;">View Repository</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- CONTACT -->
-  <section class="section" id="contact">
+  <section class="section section-alt" id="contact">
     <div class="container">
       <h2 class="section-title">Get In <span class="accent">Touch</span></h2>
       <p class="contact-sub">Whether it's a project, a collab, or just to talk tech — I'm around.</p>
@@ -96,9 +128,9 @@
           <i class="fa-brands fa-discord"></i>
           <span>KrazyRain_</span>
         </a>
-        <a href="https://github.com/CarterBarker21" target="_blank" class="contact-item">
+        <a href="https://github.com/CBaileyDev" target="_blank" class="contact-item">
           <i class="fa-brands fa-github"></i>
-          <span>CarterBarker21</span>
+          <span>CBaileyDev</span>
         </a>
       </div>
     </div>
@@ -106,7 +138,7 @@
 
   <!-- FOOTER -->
   <footer class="footer">
-    <p>© 2026 Carter Barker <span class="accent">·</span> Built from scratch</p>
+    <p>© 2026 Carter Bailey <span class="accent">·</span> Built from scratch</p>
   </footer>
 
   <script src="script.js"></script>
