@@ -87,9 +87,9 @@ if (cursorOuter && cursorDot) {
     const count = Math.floor((W * H) / 1200);
     for (let i = 0; i < count; i++) {
       const radius = Math.random() < 0.06 ? Math.random() * 1.8 + 0.8 : Math.random() * 0.9 + 0.1;
-      const brightness = 0.2 + Math.random() * 0.8;
-      // Color tint: most white, some blue-ish, a few purple
+      const brightness = 0.4 + Math.random() * 0.6;
       const hue = Math.random() < 0.15 ? 260 + Math.random() * 40 : Math.random() < 0.25 ? 200 + Math.random() * 30 : 0;
+      const twinkle = radius <= 1.2;
       stars.push({
         x: Math.random() * W,
         y: Math.random() * H,
@@ -99,6 +99,7 @@ if (cursorOuter && cursorDot) {
         twinkleSpeed: 0.003 + Math.random() * 0.012,
         twinklePhase: Math.random() * Math.PI * 2,
         hue,
+        twinkle,
       });
     }
   }
@@ -121,17 +122,18 @@ if (cursorOuter && cursorDot) {
   setInterval(spawnShooter, 2200 + Math.random() * 3000);
   setInterval(spawnShooter, 3500 + Math.random() * 4000);
 
-  let frame = 0;
-
   function draw() {
     requestAnimationFrame(draw);
     ctx.clearRect(0, 0, W, H);
-    frame++;
 
     // Draw stars
     for (const s of stars) {
-      s.twinklePhase += s.twinkleSpeed;
-      s.alpha = s.base * (0.55 + 0.45 * Math.sin(s.twinklePhase));
+      if (s.twinkle) {
+        s.twinklePhase += s.twinkleSpeed;
+        s.alpha = s.base * (0.8 + 0.2 * Math.sin(s.twinklePhase));
+      } else {
+        s.alpha = s.base;
+      }
 
       ctx.beginPath();
       ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
@@ -142,13 +144,12 @@ if (cursorOuter && cursorDot) {
       }
       ctx.fill();
 
-      // Larger stars get a glow
       if (s.r > 1.2) {
         ctx.beginPath();
         ctx.arc(s.x, s.y, s.r * 2.5, 0, Math.PI * 2);
         const grad = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.r * 2.5);
         const col = s.hue ? `hsla(${s.hue}, 80%, 80%,` : 'rgba(200, 180, 255,';
-        grad.addColorStop(0, `${col} ${s.alpha * 0.4})`);
+        grad.addColorStop(0, `${col} ${s.alpha * 0.25})`);
         grad.addColorStop(1, `${col} 0)`);
         ctx.fillStyle = grad;
         ctx.fill();
@@ -181,7 +182,6 @@ if (cursorOuter && cursorDot) {
       ctx.lineCap = 'round';
       ctx.stroke();
 
-      // Bright tip
       ctx.beginPath();
       ctx.arc(s.x, s.y, 2 * s.life, 0, Math.PI * 2);
       ctx.fillStyle = `rgba(255, 240, 255, ${s.life})`;
@@ -254,10 +254,7 @@ if (cursorOuter && cursorDot) {
 
   function buildNodes() {
     nodes = [];
-    const count = 28;
-    // Arrange in loose layers
     const layers = [4, 6, 7, 6, 5];
-    let layerX = 0;
     layers.forEach((n, li) => {
       const xBase = 0.08 + (li / (layers.length - 1)) * 0.84;
       for (let i = 0; i < n; i++) {
@@ -273,11 +270,9 @@ if (cursorOuter && cursorDot) {
       }
     });
 
-    // Spawn a pulse occasionally
     setInterval(() => {
       if (nodes.length < 2) return;
       const from = nodes[Math.floor(Math.random() * nodes.length)];
-      // Connect to node in next layer
       const candidates = nodes.filter(n => n.layer === from.layer + 1);
       if (!candidates.length) return;
       const to = candidates[Math.floor(Math.random() * candidates.length)];
@@ -289,7 +284,6 @@ if (cursorOuter && cursorDot) {
     requestAnimationFrame(draw);
     ctx.clearRect(0, 0, W, H);
 
-    // Draw connections
     for (let a = 0; a < nodes.length; a++) {
       for (let b = a + 1; b < nodes.length; b++) {
         const na = nodes[a], nb = nodes[b];
@@ -305,7 +299,6 @@ if (cursorOuter && cursorDot) {
       }
     }
 
-    // Draw pulses
     for (let i = pulses.length - 1; i >= 0; i--) {
       const p = pulses[i];
       p.t += p.speed;
@@ -317,7 +310,6 @@ if (cursorOuter && cursorDot) {
       ctx.arc(cx, cy, 3, 0, Math.PI * 2);
       ctx.fillStyle = `rgba(168, 85, 247, ${alpha * 0.9})`;
       ctx.fill();
-      // glow
       ctx.beginPath();
       ctx.arc(cx, cy, 7, 0, Math.PI * 2);
       const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, 7);
@@ -327,7 +319,6 @@ if (cursorOuter && cursorDot) {
       ctx.fill();
     }
 
-    // Draw nodes
     for (const n of nodes) {
       n.pulsePhase += 0.025;
       const a = n.alpha * (0.6 + 0.4 * Math.sin(n.pulsePhase));
@@ -337,7 +328,6 @@ if (cursorOuter && cursorDot) {
         ? `rgba(34, 211, 238, ${a})`
         : `rgba(168, 85, 247, ${a})`;
       ctx.fill();
-      // halo
       ctx.beginPath();
       ctx.arc(n.x, n.y, n.r * 2.5, 0, Math.PI * 2);
       const gl = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r * 2.5);
@@ -377,7 +367,6 @@ gsap.to('.hero-content', {
   scrollTrigger: { trigger: '.hero', start: 'top top', end: '80% top', scrub: 1 }
 });
 
-// Hide scroll hint on scroll
 gsap.to('.scroll-hint', {
   opacity: 0,
   scrollTrigger: { trigger: '.hero', start: '20% top', end: '40% top', scrub: true }
