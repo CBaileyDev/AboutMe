@@ -1,144 +1,296 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Carter Bailey</title>
-  <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet" />
+  <title>Carter Bailey — AI Developer</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Syne:wght@400..800&display=swap" rel="stylesheet">
+
+  <!-- Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <!-- Lenis Smooth Scroll -->
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+
+  <!-- GSAP -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
+
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <!-- FIREFLIES -->
-  <div class="fireflies">
-    <span></span><span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span><span></span>
+  <!-- SPACE CANVAS BACKGROUND -->
+  <canvas id="space-canvas"></canvas>
+
+  <!-- NEBULA LAYERS (parallax) -->
+  <div class="nebula-wrap" aria-hidden="true">
+    <div class="nebula nebula-1"></div>
+    <div class="nebula nebula-2"></div>
+    <div class="nebula nebula-3"></div>
   </div>
 
   <!-- CUSTOM CURSOR -->
-  <div class="cursor-dot"></div>
+  <div class="cursor-outer" aria-hidden="true"></div>
+  <div class="cursor-dot" aria-hidden="true"></div>
 
-  <!-- NAV -->
-  <nav class="navbar" id="navbar">
-    <div class="nav-logo">CB<span class="dot">.</span></div>
-    <ul class="nav-links">
+  <!-- ======================== NAV ======================== -->
+  <nav class="navbar" id="navbar" role="navigation" aria-label="Main navigation">
+    <a href="#hero" class="nav-logo" aria-label="Carter Bailey home">
+      <svg width="36" height="36" viewBox="0 0 36 36" fill="none" aria-hidden="true">
+        <polygon points="18,2 34,10 34,26 18,34 2,26 2,10" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.5"/>
+        <polygon points="18,7 29,13 29,23 18,29 7,23 7,13" stroke="currentColor" stroke-width="1" fill="none" opacity="0.3"/>
+        <circle cx="18" cy="18" r="3" fill="currentColor"/>
+        <line x1="18" y1="7" x2="18" y2="15" stroke="currentColor" stroke-width="1.2"/>
+        <line x1="18" y1="21" x2="18" y2="29" stroke="currentColor" stroke-width="1.2"/>
+        <line x1="7" y1="13" x2="15" y2="17" stroke="currentColor" stroke-width="1.2"/>
+        <line x1="21" y1="19" x2="29" y2="23" stroke="currentColor" stroke-width="1.2"/>
+        <line x1="29" y1="13" x2="21" y2="17" stroke="currentColor" stroke-width="1.2"/>
+        <line x1="15" y1="19" x2="7" y2="23" stroke="currentColor" stroke-width="1.2"/>
+      </svg>
+      <span>CB</span>
+    </a>
+    <ul class="nav-links" role="list">
       <li><a href="#about">About</a></li>
-      <li><a href="#skills">Skills</a></li>
+      <li><a href="#skills">Build</a></li>
+      <li><a href="#ai-philosophy">AI</a></li>
       <li><a href="#projects">Projects</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
+    <div class="nav-right">
+      <div class="status-dot" title="Available for work">
+        <span class="dot-pulse"></span>
+        <span>Available</span>
+      </div>
+    </div>
   </nav>
 
-  <!-- HERO -->
+  <!-- ======================== HERO ======================== -->
   <section class="hero" id="hero">
-    <div class="hero-layers">
-      <div class="hero-layer layer-back"></div>
-      <div class="hero-layer layer-mid"></div>
-      <div class="hero-layer layer-front"></div>
+    <div class="hero-parallax-wrap">
+      <div class="hero-content" data-scroll data-scroll-speed="-1.5">
+        <p class="hero-eyebrow"><span class="eyebrow-line"></span> Michigan-based Developer</p>
+        <h1 class="hero-title">
+          <span class="hero-name">Carter <span class="accent-text">Bailey</span></span>
+          <span class="hero-sub-line">
+            <span class="typewriter-prefix">I build </span>
+            <span class="typewriter-words" id="typewriter"></span>
+            <span class="cursor-blink">|</span>
+          </span>
+        </h1>
+        <p class="hero-desc">Obsessed with speed, intelligence, and pushing the boundary between<br class="desk-only"> human intuition and machine capability.</p>
+        <div class="hero-cta-row">
+          <a href="#contact" class="btn-primary">
+            <i class="fa-solid fa-satellite-dish" aria-hidden="true"></i>
+            Get In Touch
+          </a>
+          <a href="#projects" class="btn-ghost">
+            View Projects <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+          </a>
+        </div>
+      </div>
     </div>
-    <div class="hero-content">
-      <p class="hero-sub">Hey, I'm</p>
-      <h1 class="hero-title">Carter <span class="accent">Bailey</span></h1>
-      <p class="hero-desc">I build aggressive, high-performance tools, GUIs, and AI-powered systems.<br>Michigan-based. Obsessed with speed, control, and pushing limits.</p>
-      <a href="#contact" class="btn-primary">Get In Touch</a>
+
+    <!-- Floating orbit rings -->
+    <div class="orbit-ring orbit-1" aria-hidden="true"></div>
+    <div class="orbit-ring orbit-2" aria-hidden="true"></div>
+    <div class="orbit-ring orbit-3" aria-hidden="true"></div>
+
+    <!-- Scroll hint -->
+    <div class="scroll-hint" aria-hidden="true">
+      <div class="scroll-line"></div>
+      <span>Scroll</span>
     </div>
-    <div class="hero-glow"></div>
   </section>
 
-  <!-- ABOUT -->
+  <!-- ======================== ABOUT ======================== -->
   <section class="section" id="about">
     <div class="container">
-      <h2 class="section-title">About <span class="accent">Me</span></h2>
+      <div class="section-label">
+        <span class="label-line"></span>
+        <span>01 — About</span>
+      </div>
       <div class="about-grid">
-        <div class="about-text">
-          <p>I'm a developer from Washington State, now based in <strong>Michigan</strong>, focused on building things that are fast, powerful, and visually sharp.</p>
-          <p>My work spans from <strong>custom GUIs</strong> and <strong>game tooling</strong> to <strong>AI integrations</strong> — always chasing the intersection of speed and intelligence. I love stripping away bloat and building tools that actually <em>do something</em>.</p>
-          <p>Currently deep in AI/ML, automation, and making software that punches above its weight.</p>
+        <div class="about-text fade-in">
+          <h2 class="section-title">Built Different.<br><span class="accent-text">Wired for AI.</span></h2>
+          <p>I'm a developer from Washington State, now based in <strong>Michigan</strong> — focused on building tools that are fast, powerful, and intelligent. Where others see complexity, I see a system waiting to be optimized.</p>
+          <p>My work spans <strong>AI integrations</strong>, <strong>custom GUIs</strong>, and <strong>automation frameworks</strong> — always chasing the point where raw compute meets elegant control. I don't build software. I build leverage.</p>
+          <p>Currently deep in the intersection of <em>local LLMs</em>, <em>agent systems</em>, and making machines that work as hard as I do.</p>
         </div>
-        <div class="about-tags">
-          <span class="tag">AI &amp; LLMs</span>
-          <span class="tag">GUI Development</span>
-          <span class="tag">Game Tools</span>
-          <span class="tag">Automation</span>
-          <span class="tag">Powerful Tooling</span>
-          <span class="tag">Michigan 🇺🇸</span>
+        <div class="about-tags-wrap fade-in">
+          <div class="about-tags">
+            <span class="tag"><i class="fa-solid fa-brain" aria-hidden="true"></i> AI &amp; LLMs</span>
+            <span class="tag"><i class="fa-solid fa-window-restore" aria-hidden="true"></i> Custom GUIs</span>
+            <span class="tag"><i class="fa-solid fa-gamepad" aria-hidden="true"></i> Game Tooling</span>
+            <span class="tag"><i class="fa-solid fa-bolt" aria-hidden="true"></i> Automation</span>
+            <span class="tag"><i class="fa-solid fa-microchip" aria-hidden="true"></i> Local Models</span>
+            <span class="tag"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> Michigan</span>
+            <span class="tag"><i class="fa-brands fa-python" aria-hidden="true"></i> Python</span>
+            <span class="tag"><i class="fa-solid fa-terminal" aria-hidden="true"></i> C++</span>
+          </div>
+          <!-- AI tools I use strip -->
+          <div class="tools-strip fade-in">
+            <p class="tools-label">Currently Running</p>
+            <div class="tools-list">
+              <span class="tool-chip">Claude Sonnet</span>
+              <span class="tool-chip">GPT-5</span>
+              <span class="tool-chip">Qwen 3</span>
+              <span class="tool-chip">LM Studio</span>
+              <span class="tool-chip">Kimi k2</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- SKILLS -->
+  <!-- ======================== SKILLS ======================== -->
   <section class="section section-alt" id="skills">
     <div class="container">
-      <h2 class="section-title">What I <span class="accent">Build</span></h2>
-      <div class="cards">
+      <div class="section-label">
+        <span class="label-line"></span>
+        <span>02 — What I Build</span>
+      </div>
+      <h2 class="section-title text-center fade-in">Systems that <span class="accent-text">Think</span></h2>
+      <div class="cards fade-in">
         <div class="card">
-          <i class="fa-solid fa-brain card-icon"></i>
+          <div class="card-glow" aria-hidden="true"></div>
+          <i class="fa-solid fa-brain card-icon" aria-hidden="true"></i>
           <h3>AI &amp; Automation</h3>
-          <p>Leveraging cutting-edge LLMs and AI models to build tools that think fast and work harder than traditional software.</p>
+          <p>Leveraging cutting-edge LLMs and AI agents to build tools that think fast, adapt, and work harder than anything traditional software can offer.</p>
         </div>
         <div class="card">
-          <i class="fa-solid fa-window-restore card-icon"></i>
+          <div class="card-glow" aria-hidden="true"></div>
+          <i class="fa-solid fa-window-restore card-icon" aria-hidden="true"></i>
           <h3>Custom GUIs</h3>
-          <p>Crafting clean, high-performance graphical interfaces that are both beautiful and functional.</p>
+          <p>Crafting high-performance graphical interfaces in PyQt6 and web — beautiful, responsive, purpose-built for the user who demands precision.</p>
         </div>
         <div class="card">
-          <i class="fa-solid fa-gamepad card-icon"></i>
+          <div class="card-glow" aria-hidden="true"></div>
+          <i class="fa-solid fa-gamepad card-icon" aria-hidden="true"></i>
           <h3>Game Tooling</h3>
-          <p>Building game tools that operate at the edge of what's technically possible — precision, speed, reliability.</p>
+          <p>Building game tools that operate at the edge of what's technically possible. Precision, sub-millisecond timing, and zero margin for error.</p>
         </div>
         <div class="card">
-          <i class="fa-solid fa-bolt card-icon"></i>
-          <h3>Powerful Tools</h3>
-          <p>End-to-end development of utilities and systems designed for maximum output with minimum overhead.</p>
+          <div class="card-glow" aria-hidden="true"></div>
+          <i class="fa-solid fa-satellite card-icon" aria-hidden="true"></i>
+          <h3>Agent Systems</h3>
+          <p>Designing multi-agent pipelines where AI components work in swarms — distributing tasks, collaborating on solutions, and evolving through feedback.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- PROJECTS -->
-  <section class="section" id="projects">
+  <!-- ======================== AI PHILOSOPHY ======================== -->
+  <section class="section ai-philosophy" id="ai-philosophy">
     <div class="container">
-      <h2 class="section-title">Featured <span class="accent">Project</span></h2>
-      <div class="cards">
-        <div class="card project-card">
-          <i class="fa-brands fa-discord card-icon"></i>
-          <h3>ABUSER — Discord Selfbot Framework</h3>
-          <p>A Discord selfbot framework with a PyQt6 desktop GUI built for automation, moderation, and high-control server management. 12 theme presets, token bucket rate limiting, async stack — built to push what's possible with Discord tooling.</p>
-          <p class="card-meta">Python 3.8+ &nbsp;·&nbsp; discord.py-self &nbsp;·&nbsp; PyQt6 &nbsp;·&nbsp; aiohttp &nbsp;·&nbsp; MIT License</p>
-          <a href="https://github.com/CBaileyDev/ABUSER" target="_blank" class="btn-primary" style="display:inline-block;margin-top:1.2rem;">View Repository</a>
+      <div class="section-label">
+        <span class="label-line"></span>
+        <span>03 — AI Philosophy</span>
+      </div>
+      <div class="philosophy-grid">
+        <div class="philosophy-text fade-in">
+          <h2 class="section-title">AI Is Not a Tool.<br><span class="accent-text">It's a Force Multiplier.</span></h2>
+          <p>Most people use AI as a search engine. I use it as a co-pilot — one that's trained to my patterns, my codebase, and my velocity. The goal isn't to replace thinking. It's to remove every bottleneck between an idea and its execution.</p>
+          <p>I run <strong>local LLMs</strong> on my own hardware, benchmark every model that ships, and actively build systems where AI agents collaborate — each one specialized, each one accountable.</p>
+          <blockquote class="philosophy-quote">
+            "The future belongs to those who understand how to direct intelligence — not just consume it."
+          </blockquote>
+        </div>
+        <div class="philosophy-visual fade-in" aria-hidden="true">
+          <div class="neural-net" id="neural-net">
+            <!-- JS-generated nodes -->
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- CONTACT -->
-  <section class="section section-alt" id="contact">
+  <!-- ======================== PROJECTS ======================== -->
+  <section class="section section-alt" id="projects">
     <div class="container">
-      <h2 class="section-title">Get In <span class="accent">Touch</span></h2>
-      <p class="contact-sub">Whether it's a project, a collab, or just to talk tech — I'm around.</p>
-      <div class="contact-links">
-        <a href="mailto:Barker_Carter@icloud.com" class="contact-item">
-          <i class="fa-solid fa-envelope"></i>
-          <span>Barker_Carter@icloud.com</span>
-        </a>
-        <a href="https://discord.com/users/KrazyRain_" target="_blank" class="contact-item">
-          <i class="fa-brands fa-discord"></i>
-          <span>KrazyRain_</span>
-        </a>
-        <a href="https://github.com/CBaileyDev" target="_blank" class="contact-item">
-          <i class="fa-brands fa-github"></i>
-          <span>CBaileyDev</span>
-        </a>
+      <div class="section-label">
+        <span class="label-line"></span>
+        <span>04 — Projects</span>
+      </div>
+      <h2 class="section-title text-center fade-in">Featured <span class="accent-text">Work</span></h2>
+      <div class="project-card-wrap fade-in">
+        <div class="project-card">
+          <div class="project-card-inner">
+            <div class="project-header">
+              <i class="fa-brands fa-discord project-icon" aria-hidden="true"></i>
+              <div class="project-meta-tags">
+                <span class="meta-tag">Python</span>
+                <span class="meta-tag">PyQt6</span>
+                <span class="meta-tag">Automation</span>
+              </div>
+            </div>
+            <h3>ABUSER — Discord Selfbot Framework</h3>
+            <p>A full-featured Discord selfbot framework with a PyQt6 desktop GUI built for automation, moderation, and high-control server management. 12 theme presets, token bucket rate limiting, and an async architecture designed to push what Discord tooling can actually do.</p>
+            <div class="project-stack">
+              <span>discord.py-self</span><span>aiohttp</span><span>MIT License</span>
+            </div>
+            <a href="https://github.com/CBaileyDev/ABUSER" target="_blank" rel="noopener noreferrer" class="btn-primary project-btn">
+              <i class="fa-brands fa-github" aria-hidden="true"></i>
+              View Repository
+            </a>
+          </div>
+          <div class="project-card-glow" aria-hidden="true"></div>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- FOOTER -->
+  <!-- ======================== CONTACT ======================== -->
+  <section class="section" id="contact">
+    <div class="container">
+      <div class="section-label">
+        <span class="label-line"></span>
+        <span>05 — Contact</span>
+      </div>
+      <div class="contact-wrap fade-in">
+        <h2 class="section-title">Let's <span class="accent-text">Connect</span></h2>
+        <p class="contact-sub">Whether it's a project, a collab, or just to talk tech — I'm around. Reach out through any of these.</p>
+        <div class="contact-links">
+          <a href="mailto:Barker_Carter@icloud.com" class="contact-item">
+            <div class="contact-icon-wrap"><i class="fa-solid fa-envelope" aria-hidden="true"></i></div>
+            <div class="contact-text">
+              <span class="contact-label">Email</span>
+              <span class="contact-value">Barker_Carter@icloud.com</span>
+            </div>
+            <i class="fa-solid fa-arrow-up-right-from-square contact-arrow" aria-hidden="true"></i>
+          </a>
+          <a href="https://discord.com/users/KrazyRain_" target="_blank" rel="noopener noreferrer" class="contact-item">
+            <div class="contact-icon-wrap"><i class="fa-brands fa-discord" aria-hidden="true"></i></div>
+            <div class="contact-text">
+              <span class="contact-label">Discord</span>
+              <span class="contact-value">KrazyRain_</span>
+            </div>
+            <i class="fa-solid fa-arrow-up-right-from-square contact-arrow" aria-hidden="true"></i>
+          </a>
+          <a href="https://github.com/CBaileyDev" target="_blank" rel="noopener noreferrer" class="contact-item">
+            <div class="contact-icon-wrap"><i class="fa-brands fa-github" aria-hidden="true"></i></div>
+            <div class="contact-text">
+              <span class="contact-label">GitHub</span>
+              <span class="contact-value">CBaileyDev</span>
+            </div>
+            <i class="fa-solid fa-arrow-up-right-from-square contact-arrow" aria-hidden="true"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================== FOOTER ======================== -->
   <footer class="footer">
-    <p>© 2026 Carter Bailey <span class="accent">·</span> Built from scratch</p>
+    <div class="container footer-inner">
+      <p>© 2026 Carter Bailey <span class="accent-text">·</span> Built from scratch</p>
+      <p class="footer-sub">Powered by curiosity &amp; caffeine</p>
+    </div>
   </footer>
 
   <script src="script.js"></script>
