@@ -5,6 +5,12 @@
    typewriter, custom cursor, neural net
    ============================================ */
 
+// Hard-kill the problematic left nebula in case CSS overrides miss it
+document.addEventListener('DOMContentLoaded', () => {
+  const leftNebula = document.querySelector('.nebula-1');
+  if (leftNebula) leftNebula.remove();
+});
+
 // ---- LENIS SMOOTH SCROLL ----
 const lenis = new Lenis({
   duration: 1.1,
