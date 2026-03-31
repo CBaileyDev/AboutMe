@@ -1,11 +1,11 @@
 /* ============================================
    Carter Bailey Portfolio — script.js
-   Space/AI theme: starfield, shooting stars,
+   Space/AI theme: starfield + serious tone
    Lenis smooth scroll, GSAP parallax,
    typewriter, custom cursor, neural net
    ============================================ */
 
-// Hard-kill the problematic left nebula in case CSS overrides miss it
+// Make sure any legacy left-nebula element is removed just in case
 document.addEventListener('DOMContentLoaded', () => {
   const leftNebula = document.querySelector('.nebula-1');
   if (leftNebula) leftNebula.remove();
@@ -76,9 +76,10 @@ if (cursorOuter && cursorDot) {
   });
 }
 
-// ---- SPACE CANVAS (starfield + shooting stars) ----
+// ---- SPACE CANVAS (static starfield + rare shooting stars) ----
 (function initSpace() {
   const canvas = document.getElementById('space-canvas');
+  if (!canvas) return;
   const ctx    = canvas.getContext('2d');
   let W, H, stars = [], shooters = [];
 
@@ -90,15 +91,15 @@ if (cursorOuter && cursorDot) {
 
   function buildStars() {
     stars = [];
-    const count = Math.floor((W * H) / 1400); // a bit fewer stars, calmer overall
+    const count = Math.floor((W * H) / 1500); // slightly sparser for serious tone
     for (let i = 0; i < count; i++) {
-      const radius = Math.random() < 0.04 ? Math.random() * 1.6 + 0.7 : Math.random() * 1.0 + 0.1;
-      const brightness = 0.35 + Math.random() * 0.45; // stable range, no hard pulsing
-      const hue = Math.random() < 0.12
-        ? 260 + Math.random() * 40   // some purple stars
-        : Math.random() < 0.18
-          ? 200 + Math.random() * 30 // some blue stars
-          : 0;                        // mostly white
+      const radius = Math.random() < 0.03 ? Math.random() * 1.6 + 0.7 : Math.random() * 1.0 + 0.1;
+      const brightness = 0.32 + Math.random() * 0.4; // stable range, no twinkle
+      const hue = Math.random() < 0.1
+        ? 260 + Math.random() * 30   // a few subtle purple stars
+        : Math.random() < 0.15
+          ? 200 + Math.random() * 25 // a few blue stars
+          : 0;                        // mostly neutral/white
       stars.push({
         x: Math.random() * W,
         y: Math.random() * H,
@@ -111,42 +112,41 @@ if (cursorOuter && cursorDot) {
 
   function spawnShooter() {
     const angle = (Math.random() * 30 + 15) * (Math.PI / 180);
-    const speed = 8 + Math.random() * 14;
+    const speed = 8 + Math.random() * 12;
     shooters.push({
       x: Math.random() * W * 0.8,
       y: Math.random() * H * 0.4,
       vx: Math.cos(angle) * speed,
       vy: Math.sin(angle) * speed,
-      len: 80 + Math.random() * 120,
+      len: 70 + Math.random() * 90,
       life: 1,
     });
   }
 
-  // Spawn shooters occasionally (kept rare so they feel like events)
-  setInterval(spawnShooter, 2800 + Math.random() * 3000);
+  // Rare shooting stars for subtle interest
+  setInterval(spawnShooter, 3500 + Math.random() * 3500);
 
   function draw() {
     requestAnimationFrame(draw);
     ctx.clearRect(0, 0, W, H);
 
-    // Draw static stars (no twinkle → no flicker)
+    // Draw static stars
     for (const s of stars) {
       ctx.beginPath();
       ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
       if (s.hue) {
-        ctx.fillStyle = `hsla(${s.hue}, 60%, 80%, ${s.alpha})`;
+        ctx.fillStyle = `hsla(${s.hue}, 55%, 78%, ${s.alpha})`;
       } else {
-        ctx.fillStyle = `rgba(245, 242, 255, ${s.alpha})`;
+        ctx.fillStyle = `rgba(236, 233, 255, ${s.alpha})`;
       }
       ctx.fill();
 
-      // Gentle halo only for the slightly larger stars
       if (s.r > 1.1) {
         ctx.beginPath();
-        ctx.arc(s.x, s.y, s.r * 2.1, 0, Math.PI * 2);
-        const grad = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.r * 2.1);
-        const col = s.hue ? `hsla(${s.hue}, 80%, 80%,` : 'rgba(200, 180, 255,';
-        grad.addColorStop(0, `${col} ${s.alpha * 0.25})`);
+        ctx.arc(s.x, s.y, s.r * 2, 0, Math.PI * 2);
+        const grad = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.r * 2);
+        const col = s.hue ? `hsla(${s.hue}, 70%, 80%,` : 'rgba(200, 190, 255,';
+        grad.addColorStop(0, `${col} ${s.alpha * 0.2})`);
         grad.addColorStop(1, `${col} 0)`);
         ctx.fillStyle = grad;
         ctx.fill();
@@ -158,7 +158,7 @@ if (cursorOuter && cursorDot) {
       const s = shooters[i];
       s.x += s.vx;
       s.y += s.vy;
-      s.life -= 0.018;
+      s.life -= 0.017;
       if (s.life <= 0 || s.x > W + 200 || s.y > H + 100) {
         shooters.splice(i, 1);
         continue;
@@ -168,21 +168,21 @@ if (cursorOuter && cursorDot) {
       const tailY = s.y - s.vy * (s.len / (Math.abs(s.vy) + 0.001));
 
       const grad = ctx.createLinearGradient(tailX, tailY, s.x, s.y);
-      grad.addColorStop(0, `rgba(200, 160, 255, 0)`);
-      grad.addColorStop(0.6, `rgba(220, 200, 255, ${s.life * 0.45})`);
+      grad.addColorStop(0, `rgba(200, 170, 255, 0)`);
+      grad.addColorStop(0.6, `rgba(225, 210, 255, ${s.life * 0.4})`);
       grad.addColorStop(1, `rgba(255, 255, 255, ${s.life})`);
 
       ctx.beginPath();
       ctx.moveTo(tailX, tailY);
       ctx.lineTo(s.x, s.y);
       ctx.strokeStyle = grad;
-      ctx.lineWidth = 1.4 * s.life;
+      ctx.lineWidth = 1.3 * s.life;
       ctx.lineCap = 'round';
       ctx.stroke();
 
       ctx.beginPath();
-      ctx.arc(s.x, s.y, 2 * s.life, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(255, 240, 255, ${s.life})`;
+      ctx.arc(s.x, s.y, 1.8 * s.life, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255, 245, 255, ${s.life})`;
       ctx.fill();
     }
   }
@@ -342,22 +342,7 @@ if (cursorOuter && cursorDot) {
   draw();
 })();
 
-// ---- GSAP HERO PARALLAX ----
-gsap.to('.nebula-1', {
-  yPercent: 25,
-  ease: 'none',
-  scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 1.5 }
-});
-gsap.to('.nebula-2', {
-  yPercent: 15,
-  ease: 'none',
-  scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 2 }
-});
-gsap.to('.nebula-3', {
-  yPercent: 10,
-  ease: 'none',
-  scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 2.5 }
-});
+// ---- GSAP HERO PARALLAX (no nebula transforms now, just content/scroll hint) ----
 
 gsap.to('.hero-content', {
   yPercent: 20,
