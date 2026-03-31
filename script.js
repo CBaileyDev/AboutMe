@@ -25,7 +25,7 @@ document.querySelectorAll('a[href^="#"]').forEach(el => {
   el.addEventListener('click', e => {
     e.preventDefault();
     const target = document.querySelector(el.getAttribute('href'));
-    if (target) lenis.scrollTo(target, { offset: -80, duration: 1.4 });
+    if (target) lenis.scrollTo(target, { offset: -80, duration: 1.2 });
   });
 });
 
@@ -84,22 +84,21 @@ if (cursorOuter && cursorDot) {
 
   function buildStars() {
     stars = [];
-    const count = Math.floor((W * H) / 1200);
+    const count = Math.floor((W * H) / 1400); // a bit fewer stars, calmer overall
     for (let i = 0; i < count; i++) {
-      const radius = Math.random() < 0.06 ? Math.random() * 1.8 + 0.8 : Math.random() * 0.9 + 0.1;
-      const brightness = 0.4 + Math.random() * 0.6;
-      const hue = Math.random() < 0.15 ? 260 + Math.random() * 40 : Math.random() < 0.25 ? 200 + Math.random() * 30 : 0;
-      const twinkle = radius <= 1.2;
+      const radius = Math.random() < 0.04 ? Math.random() * 1.6 + 0.7 : Math.random() * 1.0 + 0.1;
+      const brightness = 0.35 + Math.random() * 0.45; // stable range, no hard pulsing
+      const hue = Math.random() < 0.12
+        ? 260 + Math.random() * 40   // some purple stars
+        : Math.random() < 0.18
+          ? 200 + Math.random() * 30 // some blue stars
+          : 0;                        // mostly white
       stars.push({
         x: Math.random() * W,
         y: Math.random() * H,
         r: radius,
-        base: brightness,
         alpha: brightness,
-        twinkleSpeed: 0.003 + Math.random() * 0.012,
-        twinklePhase: Math.random() * Math.PI * 2,
         hue,
-        twinkle,
       });
     }
   }
@@ -113,41 +112,33 @@ if (cursorOuter && cursorDot) {
       vx: Math.cos(angle) * speed,
       vy: Math.sin(angle) * speed,
       len: 80 + Math.random() * 120,
-      alpha: 1,
       life: 1,
     });
   }
 
-  // Spawn shooters randomly
-  setInterval(spawnShooter, 2200 + Math.random() * 3000);
-  setInterval(spawnShooter, 3500 + Math.random() * 4000);
+  // Spawn shooters occasionally (kept rare so they feel like events)
+  setInterval(spawnShooter, 2800 + Math.random() * 3000);
 
   function draw() {
     requestAnimationFrame(draw);
     ctx.clearRect(0, 0, W, H);
 
-    // Draw stars
+    // Draw static stars (no twinkle → no flicker)
     for (const s of stars) {
-      if (s.twinkle) {
-        s.twinklePhase += s.twinkleSpeed;
-        s.alpha = s.base * (0.8 + 0.2 * Math.sin(s.twinklePhase));
-      } else {
-        s.alpha = s.base;
-      }
-
       ctx.beginPath();
       ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
       if (s.hue) {
-        ctx.fillStyle = `hsla(${s.hue}, 60%, 85%, ${s.alpha})`;
+        ctx.fillStyle = `hsla(${s.hue}, 60%, 80%, ${s.alpha})`;
       } else {
-        ctx.fillStyle = `rgba(255, 255, 255, ${s.alpha})`;
+        ctx.fillStyle = `rgba(245, 242, 255, ${s.alpha})`;
       }
       ctx.fill();
 
-      if (s.r > 1.2) {
+      // Gentle halo only for the slightly larger stars
+      if (s.r > 1.1) {
         ctx.beginPath();
-        ctx.arc(s.x, s.y, s.r * 2.5, 0, Math.PI * 2);
-        const grad = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.r * 2.5);
+        ctx.arc(s.x, s.y, s.r * 2.1, 0, Math.PI * 2);
+        const grad = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.r * 2.1);
         const col = s.hue ? `hsla(${s.hue}, 80%, 80%,` : 'rgba(200, 180, 255,';
         grad.addColorStop(0, `${col} ${s.alpha * 0.25})`);
         grad.addColorStop(1, `${col} 0)`);
@@ -163,7 +154,8 @@ if (cursorOuter && cursorDot) {
       s.y += s.vy;
       s.life -= 0.018;
       if (s.life <= 0 || s.x > W + 200 || s.y > H + 100) {
-        shooters.splice(i, 1); continue;
+        shooters.splice(i, 1);
+        continue;
       }
 
       const tailX = s.x - s.vx * (s.len / (Math.abs(s.vx) + 0.001));
@@ -171,14 +163,14 @@ if (cursorOuter && cursorDot) {
 
       const grad = ctx.createLinearGradient(tailX, tailY, s.x, s.y);
       grad.addColorStop(0, `rgba(200, 160, 255, 0)`);
-      grad.addColorStop(0.6, `rgba(220, 200, 255, ${s.life * 0.5})`);
+      grad.addColorStop(0.6, `rgba(220, 200, 255, ${s.life * 0.45})`);
       grad.addColorStop(1, `rgba(255, 255, 255, ${s.life})`);
 
       ctx.beginPath();
       ctx.moveTo(tailX, tailY);
       ctx.lineTo(s.x, s.y);
       ctx.strokeStyle = grad;
-      ctx.lineWidth = 1.5 * s.life;
+      ctx.lineWidth = 1.4 * s.life;
       ctx.lineCap = 'round';
       ctx.stroke();
 
@@ -360,6 +352,7 @@ gsap.to('.nebula-3', {
   ease: 'none',
   scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 2.5 }
 });
+
 gsap.to('.hero-content', {
   yPercent: 20,
   opacity: 0.3,
