@@ -56,8 +56,8 @@
         x: Math.random() * 2 - 0.5,
         y: Math.random() * 2 - 0.5,
         z: 0.35 + depth * 0.65,
-        size: 0.4 + depth * 1.6,
-        flicker: 0.4 + Math.random() * 0.6,
+        size: 0.9 + depth * 2.0,
+        flicker: 0.55 + Math.random() * 0.45,
         flickerSpeed: 0.5 + Math.random() * 2,
         hue: 210 + Math.random() * 40,
         sparkle: Math.random() < 0.08
@@ -168,7 +168,7 @@
       if (sy < -20 || sy > H + 20) continue;
 
       const a = s.flicker * (0.6 + 0.4 * Math.sin(t * s.flickerSpeed + s.x * 10));
-      const finalAlpha = a * (0.5 + s.z * 0.5);
+      const finalAlpha = a * (0.6 + s.z * 0.4);
 
       if (warpBump > 0.05) {
         const streakLen = warpBump * 60 * s.z * warpBoost;
