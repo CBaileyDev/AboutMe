@@ -118,6 +118,14 @@
     const pWarp = rangeProgress(progress, 0.48, 0.62);
     const pDeep = rangeProgress(progress, 0.62, 1.0);
 
+    // Warp intensity: 0 -> 1 -> 0 arc across the warp range, fully 0 outside.
+    // This prevents streaks from persisting through deep space/contact.
+    let warpBump = 0;
+    if (progress > 0.48 && progress < 0.62) {
+      const wt = (progress - 0.48) / (0.62 - 0.48);
+      warpBump = Math.sin(wt * Math.PI);
+    }
+
     // === EARTH LIMB ===
     const earthY = lerp(0, -120, smooth(pAscent + pSolar * 0.5));
     const earthScale = lerp(1, 0.35, smooth(pAscent + pSolar * 0.3));
@@ -149,8 +157,9 @@
 
     // === STARS ===
     const baseScroll = progress * 3;
-    const warpBoost = 1 + pWarp * 12 * (1 - pWarp * 0.3);
-    const starSpeedMultiplier = 1 + pAscent * 0.8 + pSolar * 1.2;
+    const warpBoost = 1 + warpBump * 11;
+    // Stars accelerate through ascent/solar/warp, then calm in deep space.
+    const starSpeedMultiplier = 1 + pAscent * 0.8 + pSolar * 1.2 + warpBump * 2 - pDeep * 1.4;
 
     for (const s of stars) {
       const yShift = (baseScroll * s.z * starSpeedMultiplier) % 2;
@@ -161,8 +170,8 @@
       const a = s.flicker * (0.6 + 0.4 * Math.sin(t * s.flickerSpeed + s.x * 10));
       const finalAlpha = a * (0.5 + s.z * 0.5);
 
-      if (pWarp > 0.05) {
-        const streakLen = pWarp * 60 * s.z * warpBoost;
+      if (warpBump > 0.05) {
+        const streakLen = warpBump * 60 * s.z * warpBoost;
         const grad = ctx.createLinearGradient(sx, sy, sx, sy + streakLen);
         grad.addColorStop(0, `rgba(220,230,255,${finalAlpha})`);
         grad.addColorStop(1, `rgba(220,230,255,0)`);
@@ -192,9 +201,9 @@
     }
 
     // === WARP STREAKS (center radial burst) ===
-    if (pWarp > 0.02) {
+    if (warpBump > 0.02) {
       const cx = W / 2, cy = H / 2;
-      const intensity = Math.sin(pWarp * Math.PI);
+      const intensity = warpBump;
       for (const w of warpStreaks) {
         w.dist += 0.02 * w.speed * warpBoost * 0.15;
         if (w.dist > 1.4) w.dist = 0;
@@ -216,7 +225,7 @@
     }
 
     // === DEBRIS in solar system ===
-    if (pSolar > 0.15 && pSolar < 0.98 && pWarp < 0.1) {
+    if (pSolar > 0.15 && pSolar < 0.98 && warpBump < 0.1) {
       for (const d of debris) {
         d.rot += d.rotSpeed;
         const yShift = (baseScroll * d.z * 1.5) % 1.5;
