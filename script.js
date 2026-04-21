@@ -1,5 +1,5 @@
 /* ==========================================================
-   CARTER BAILEY — ABOUT ME
+   CARTER BAILEY — ABOUT ME (Enhanced with GSAP, Magnetic, Mobile)
    Scroll-driven space engine + constellation of repos
    ========================================================== */
 
@@ -296,6 +296,187 @@
 
 
 /* ==========================================================
+   GSAP ANIMATIONS & SCROLL TRIGGERS
+   ========================================================== */
+(function () {
+  'use strict';
+
+  if (typeof gsap === 'undefined') return;
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Hero section entrance
+  gsap.from('.hero-name', {
+    opacity: 0,
+    y: 40,
+    duration: 1,
+    ease: 'power3.out',
+    delay: 0.2
+  });
+
+  gsap.from('.hero-sub', {
+    opacity: 0,
+    y: 20,
+    duration: 0.8,
+    ease: 'power3.out',
+    delay: 0.4
+  });
+
+  // About section
+  gsap.from('.about-lead', {
+    scrollTrigger: {
+      trigger: '.about',
+      start: 'top 60%',
+      toggleActions: 'play none none reverse'
+    },
+    opacity: 0,
+    x: -40,
+    duration: 0.8,
+    ease: 'power3.out'
+  });
+
+  gsap.from('.about-body p', {
+    scrollTrigger: {
+      trigger: '.about',
+      start: 'top 60%',
+      toggleActions: 'play none none reverse'
+    },
+    opacity: 0,
+    x: 40,
+    duration: 0.8,
+    ease: 'power3.out',
+    stagger: 0.15
+  });
+
+  // Build cards stagger
+  gsap.from('.build-card', {
+    scrollTrigger: {
+      trigger: '.build',
+      start: 'top 50%',
+      toggleActions: 'play none none reverse'
+    },
+    opacity: 0,
+    y: 30,
+    duration: 0.6,
+    ease: 'power3.out',
+    stagger: 0.1
+  });
+
+  // Philosophy quote
+  gsap.from('.philosophy-quote', {
+    scrollTrigger: {
+      trigger: '.philosophy',
+      start: 'top 60%',
+      toggleActions: 'play none none reverse'
+    },
+    opacity: 0,
+    scale: 0.95,
+    duration: 0.8,
+    ease: 'power3.out'
+  });
+
+  // Contact section
+  gsap.from('.contact-title', {
+    scrollTrigger: {
+      trigger: '.contact',
+      start: 'top 60%',
+      toggleActions: 'play none none reverse'
+    },
+    opacity: 0,
+    y: 30,
+    duration: 0.8,
+    ease: 'power3.out'
+  });
+
+  gsap.from('.channel', {
+    scrollTrigger: {
+      trigger: '.contact',
+      start: 'top 50%',
+      toggleActions: 'play none none reverse'
+    },
+    opacity: 0,
+    y: 20,
+    duration: 0.6,
+    ease: 'power3.out',
+    stagger: 0.1
+  });
+})();
+
+
+/* ==========================================================
+   MAGNETIC BUTTONS & ENHANCED INTERACTIVITY
+   ========================================================== */
+(function () {
+  'use strict';
+
+  // Magnetic effect for contact channels
+  const channels = document.querySelectorAll('.channel');
+  channels.forEach(channel => {
+    let magneticX = 0, magneticY = 0;
+    
+    channel.addEventListener('mousemove', (e) => {
+      const rect = channel.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      const distX = (e.clientX - centerX) * 0.15;
+      const distY = (e.clientY - centerY) * 0.15;
+      
+      magneticX = distX;
+      magneticY = distY;
+      
+      channel.style.transform = `translate(${magneticX}px, ${magneticY}px)`;
+    });
+    
+    channel.addEventListener('mouseleave', () => {
+      channel.style.transform = 'translate(0, 0)';
+    });
+  });
+
+  // Magnetic effect for repo detail CTA
+  const ctaButton = document.querySelector('.repo-detail .d-cta');
+  if (ctaButton) {
+    ctaButton.addEventListener('mousemove', (e) => {
+      const rect = ctaButton.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      const distX = (e.clientX - centerX) * 0.2;
+      const distY = (e.clientY - centerY) * 0.2;
+      
+      ctaButton.style.transform = `translate(${distX}px, ${distY}px)`;
+    });
+    
+    ctaButton.addEventListener('mouseleave', () => {
+      ctaButton.style.transform = 'translate(0, 0)';
+    });
+  }
+
+  // Repo star magnetic effect
+  const repoStars = document.querySelectorAll('.repo-star');
+  repoStars.forEach(star => {
+    star.addEventListener('mousemove', (e) => {
+      const rect = star.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      const distX = (e.clientX - centerX) * 0.1;
+      const distY = (e.clientY - centerY) * 0.1;
+      
+      const node = star.querySelector('.node');
+      if (node) {
+        node.style.transform = `scale(1.4) translate(${distX}px, ${distY}px)`;
+      }
+    });
+    
+    star.addEventListener('mouseleave', () => {
+      const node = star.querySelector('.node');
+      if (node) {
+        node.style.transform = 'scale(1)';
+      }
+    });
+  });
+})();
+
+
+/* ==========================================================
    CONSTELLATION & UI wiring
    ========================================================== */
 (function () {
@@ -364,7 +545,7 @@
       langColor: '#e34c26',
       status: 'Live',
       url: 'https://github.com/CBaileyDev/AboutMe',
-      details: 'The site you\'re looking at. Built from scratch, no frameworks — pure HTML, CSS, and JavaScript.',
+      details: 'The site you\'re looking at. Built from scratch, no frameworks — pure HTML, CSS, and JavaScript with GSAP enhancements.',
       x: 0.30, y: 0.78,
       magnitude: 0.8
     }
@@ -394,6 +575,16 @@
     dCta.href = r.url;
     detail.classList.add('open');
     scrim.classList.add('open');
+
+    // GSAP animation for modal
+    if (typeof gsap !== 'undefined') {
+      gsap.from(detail, {
+        opacity: 0,
+        y: -20,
+        duration: 0.3,
+        ease: 'power2.out'
+      });
+    }
   }
 
   function closeDetail() {
@@ -498,7 +689,7 @@
         line.setAttribute('y1', py);
         line.setAttribute('x2', otherPx);
         line.setAttribute('y2', otherPy);
-        line.setAttribute('class', 'link highlight temp');
+        line.setAttribute('class', 'link temp');
         svg.appendChild(line);
       } else {
         line.classList.add('highlight');
